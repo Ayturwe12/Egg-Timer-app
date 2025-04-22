@@ -7,6 +7,7 @@ import os
 
 
 root = Tk()
+root.resizable(0,0)
 root.geometry("400x400")
 root.title("Yumurta Sayacı")
 
@@ -24,6 +25,13 @@ bg_image = ImageTk.PhotoImage(image)
 bg_label = Label(root, image=bg_image)
 bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
+
+
+
+dur=False #süre döngüsünü durdurmak için bir değişken
+yeniden=False
+
+
 def stop_music():
     pygame.mixer.music.stop()
 def durdur():
@@ -35,11 +43,6 @@ def resetle():
     yeniden=True
     stop_music()
 
-
-dur=False #süre döngüsünü durdurmak için bir değişken
-yeniden=False
-
-
 pygame.mixer.init()
 music1=os.path.join(base, "tiktacsound.mp3")
 pygame.mixer.music.load(music1)
@@ -49,7 +52,7 @@ pygame.mixer.music.load(music1)
 def countdown(second):
 
 
-    global l,dur,yeniden,sure
+    global l,dur,yeniden,sure,stop_button
 
     min = second // 60
     sec = second % 60
@@ -62,6 +65,7 @@ def countdown(second):
 
 
         if not dur and not yeniden :
+            pygame.mixer.music.load(music1)
             pygame.mixer.music.play(-1)
             if min!=0 or sec!=0:
                 after = root.after(1000, countdown, second - 1)
@@ -75,9 +79,13 @@ def countdown(second):
 
 
 
-                stop_button=Button(root,text="alarmı kapat",command=lambda:stop_music(),font=("Tahoma", 10, "bold"),
+                stop_button=Button(root,text="alarmı kapat",command=lambda:
+                [stop_music(),delete_all(),button1_clicked(data)],font=("Tahoma", 10, "bold"),
                     bg="#FF4500", fg="black", relief="ridge", cursor="hand2")
                 stop_button.place(x=105,y=300,width=200)
+
+
+
 
 
 
@@ -96,8 +104,7 @@ def countdown(second):
                 yeniden=False
 
     except:
-        return
-
+        pass
 
 
 
@@ -109,9 +116,10 @@ def countdown(second):
 
 
 def button1_clicked(x):
-    global l,b,b1,saniye,sure
+    global l,b,b1,saniye,sure,data
     delete_all()
     stop_music()
+    data=x
     if x=="start":
         frame_creator()
     else:
